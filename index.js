@@ -33,10 +33,8 @@ const openai = new OpenAIApi(configuration);
 const port = process.env.PORT || 3000;
 
 app.get("/", (req, res) => {
-  return res.json({
-    message: "connection success"
-  })
-})
+    res.send({ message: "Connection success " });
+});
 
 app.post("/ask", async (req, res) => {
   const prompt = req.body.prompt;
@@ -62,6 +60,16 @@ app.post("/ask", async (req, res) => {
   } catch (error) {
     console.log(error.message);
   }
+});
+
+// err handling
+app.use((err, req, res, next) => {
+    res.send(err);
+    next();
+});
+// Handle requests to the root URL ("/") with a 404 status code.
+app.use("/", (req, res) => {
+    res.sendStatus(404);
 });
 
 app.listen(port, () => console.log(`Server is running on http://localhost:${port} !!`));

@@ -62,14 +62,4 @@ app.post("/ask", async (req, res) => {
   }
 });
 
-// err handling
-app.use((err, req, res, next) => {
-    res.send(err);
-    next();
-});
-// Handle requests to the root URL ("/") with a 404 status code.
-app.use("/", (req, res) => {
-    res.sendStatus(404);
-});
-
 app.listen(port, () => console.log(`Server is running on http://localhost:${port} !!`));

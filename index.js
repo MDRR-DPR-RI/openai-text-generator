@@ -9,13 +9,13 @@ app.use(express.json());
 app.use(function (req, res, next) {
 
     // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:8000');
+    res.setHeader('Access-Control-Allow-Origin', '*');
 
     // Request methods you wish to allow
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Methods', '*');
 
     // Request headers you wish to allow
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    res.setHeader('Access-Control-Allow-Headers', '*');
 
     // Set to true if you need the website to include cookies in the requests sent
     // to the API (e.g. in case you use sessions)
@@ -24,6 +24,7 @@ app.use(function (req, res, next) {
     // Pass to next layer of middleware
     next();
 });
+app.options('*', function (req,res) { res.sendStatus(200); });
 
 const configuration = new Configuration({
   apiKey: process.env.OPEN_AI_TOKEN,
@@ -48,7 +49,7 @@ app.post("/ask", async (req, res) => {
     const response = await openai.createCompletion({
       model: "text-davinci-003",
       prompt,
-      max_tokens: 64,
+      max_tokens: process.env.max_tokens,
     });
 
     const completion = response.data.choices[0].text;
